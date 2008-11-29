@@ -1,5 +1,6 @@
 " cdargs.vim - Directory bookmarking based on CDargs
 " Author: Chris Gaffney
+" GetLatestVimScripts: 2466 1 :AutoInstall: cdargs.vim
 " URL:    http://github.com/gaffneyc/vim-cdargs
 " CDargs: http://www.skamphausen.de/cgi-bin/ska/CDargs
 
