@@ -2,11 +2,25 @@
 " Author: Chris Gaffney
 " GetLatestVimScripts: 2466 1 :AutoInstall: cdargs.vim
 " URL:    http://github.com/gaffneyc/vim-cdargs
+" VimURL: http://www.vim.org/scripts/script.php?script_id=2466
 " CDargs: http://www.skamphausen.de/cgi-bin/ska/CDargs
 
 " Commands
 "   Cdb - Change directory to bookmark
 "   Eb  - Edit file in bookmark directory
+"   Tb  - Similar to Eb but edit the file in a new tab
+
+" History
+"   1.0
+"     Initial Release
+"
+"   1.1
+"     Added Tb command
+"     Refactored command execution
+
+" Todo
+"   - Figure out bang commands
+"   - Make completion functions and execute global(?)
 
 " Exit quickly when:
 " - this plugin was already loaded (or disabled)
@@ -107,7 +121,7 @@ function! s:bookmark_completion(argument, show_files)
 
     return l:matched
   else
-    " Bookmark completeion
+    " Bookmark completion
     let l:matched = []
 
     for bookmark in keys(l:bookmarks)
@@ -163,7 +177,7 @@ function! s:parse_bookmark_and_path(raw)
   endif
 
   " Valid slash
-  let l:bookmark = a:raw[:l:idx - 1] 
+  let l:bookmark = a:raw[:l:idx - 1]
   let l:path = a:raw[l:idx + 1:]
 
   return [ l:bookmark , l:path ]
@@ -181,22 +195,19 @@ function! s:path_for(raw)
   end
 endfunction
 
+function! s:execute(command, raw)
+  let l:path = s:path_for(a:raw)
+
+  if strlen(l:path)
+    execute a:command . ' ' . l:path
+  end
+endfunction
+
 " Change working directory to bookmark or it's subpath
-function! s:cdb(raw)
-  let l:path = s:path_for(a:raw)
+command! -nargs=1 -complete=customlist,s:directory_completion Cdb call s:execute('cd', <f-args>)
 
-  if strlen(l:path)
-    execute ':cd ' . l:path
-  end
-endfunction
+" Edit file under a bookmark's path
+command! -nargs=1 -complete=customlist,s:file_completion Eb call s:execute('edit', <f-args>)
 
-function! s:eb(raw)
-  let l:path = s:path_for(a:raw)
-
-  if strlen(l:path)
-    execute ':e ' . l:path
-  end
-endfunction
-
-command! -nargs=1 -complete=customlist,s:directory_completion Cdb call s:cdb(<f-args>)
-command! -bang -nargs=1 -complete=customlist,s:file_completion Eb call s:eb(<f-args>)
+" Edit file under a bookmark's path in a new tab
+command! -nargs=1 -complete=customlist,s:file_completion Tb call s:execute('tabedit', <f-args>)
