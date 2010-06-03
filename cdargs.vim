@@ -20,6 +20,7 @@
 "
 "   1.2
 "     Fix bookmarks that have a space in their path
+"     Better error handling if a subpath cannot be found
 
 " Todo
 "   - Figure out bang commands
@@ -207,7 +208,11 @@ function! s:execute(command, raw)
   let l:path = substitute(s:path_for(a:raw), " ", '\\ ', "g")
 
   if strlen(l:path)
-    execute a:command . ' ' . l:path
+    try
+      execute a:command . ' ' . l:path
+    catch
+      call s:error('Unable to find path: ' . l:path)
+    endtry
   end
 endfunction
 
