@@ -17,6 +17,9 @@
 "   1.1
 "     Added Tb command
 "     Refactored command execution
+"
+"   1.2
+"     Fix bookmarks that have a space in their path
 
 " Todo
 "   - Figure out bang commands
@@ -60,7 +63,11 @@ function! s:bookmarks()
 
   " Parse the bookmark definition file
   for line in readfile(s:cdargs_file)
-    let [ l:bookmark, l:path] = split(line, " ")
+    let l:idx = stridx(line, " ")
+
+    let l:bookmark = strpart(line, 0, l:idx)
+    let l:path     = strpart(line, l:idx + 1)
+
     let l:bookmarks[l:bookmark] = s:trim_trailing_slash(l:path)
   endfor
 
@@ -196,7 +203,8 @@ function! s:path_for(raw)
 endfunction
 
 function! s:execute(command, raw)
-  let l:path = s:path_for(a:raw)
+  " Escape spaces in the path
+  let l:path = substitute(s:path_for(a:raw), " ", '\\ ', "g")
 
   if strlen(l:path)
     execute a:command . ' ' . l:path
