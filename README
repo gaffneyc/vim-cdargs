@@ -1,9 +1,10 @@
 cdargs.vim - Directory bookmarking based on CDargs
 
 Reads your cdargs bookmark file ("~/.cdargs") and provides a couple commands:
-  Cdb - Change directory to bookmark
-  Eb  - Edit file in bookmark directory
-  Tb  - Similar to Eb but edit the file in a new tab
+  Cdb   - Change directory to bookmark
+  Eb    - Edit file in bookmark directory
+  Tb    - Similar to Eb but edit the file in a new tab
+  Cdadd - Add the current directory
 
 CDargs: http://www.skamphausen.de/cgi-bin/ska/CDargs
 
