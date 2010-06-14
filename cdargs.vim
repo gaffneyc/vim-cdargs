@@ -25,10 +25,6 @@
 "   1.3
 "     Added Cdadd for adding a bookmark for the current directory
 
-" Todo
-"   - Figure out bang commands
-"   - Make completion functions and execute global(?)
-
 " Exit quickly when:
 " - this plugin was already loaded (or disabled)
 " - when 'compatible' is set
