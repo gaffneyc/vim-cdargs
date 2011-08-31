@@ -35,6 +35,7 @@ let g:loaded_cdargs = 1
 
 " What file to read
 let s:cdargs_file = $HOME . '/.cdargs'
+let g:cdargs_current_directory = ''
 
 " Bookmark caching
 let s:cached_bookmarks = {}
@@ -235,6 +236,10 @@ function! s:execute(command, raw)
   " Escape spaces in the path
   let l:path = substitute(s:path_for(a:raw), " ", '\\ ', "g")
 
+  if a:command == 'cd'
+    let g:cdargs_current_directory = split(a:raw, '/')[0]
+  endif
+
   if strlen(l:path)
     try
       execute a:command . ' ' . l:path
@@ -242,6 +247,10 @@ function! s:execute(command, raw)
       call s:error('Unable to find path: ' . l:path)
     endtry
   end
+endfunction
+
+function! CdargsCurrentDirectory()
+  return g:cdargs_current_directory
 endfunction
 
 " Change working directory to bookmark or it's subpath
